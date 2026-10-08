@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucas Justiniano | Portfolio</title>
+
+    <style>
+        /* General page styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #203a5e;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        nav {
+            background-color: #14263d;
+            text-align: center;
+            padding: 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 15px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #ffcc00;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        section {
+            background-color: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #ddd;
+        }
+
+        h2 {
+            color: #203a5e;
+        }
+
+        .projects {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .project {
+            flex: 1 1 200px;
+            text-align: center;
+        }
+
+        .project img {
+            width: 100%;
+            max-width: 220px;
+            border-radius: 8px;
+        }
+
+        .project a {
+            color: #203a5e;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0 15px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #203a5e;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #345b8c;
+        }
+
+        footer {
+            background-color: #14263d;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Website header -->
+    <header>
+        <h1>Lucas Justiniano</h1>
+        <p>Software Development | Cybersecurity | IT</p>
+        <h2 id="welcomeMessage" style="color:white;"></h2>
+    </header>
+
+    <!-- Navigation menu -->
+    <nav>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <main>
+
+        <!-- About section -->
+        <section id="about">
+            <h2>About Me</h2>
+
+            <p>
+                Hello! My name is Lucas Justiniano.
+                I am a United States Marine Corps veteran
+                and an Information Technology student
+                at ECPI University.
+            </p>
+
+            <p>
+                I earned my Associate of Science degree
+                in Computer and Information Sciences,
+                specializing in Cyber and Network Security.
+                I am currently pursuing my bachelor's degree
+                in Information Technology with a focus on
+                Software Development and Coding.
+            </p>
+
+            <p>
+                I hold CompTIA Security+ and CySA+
+                certifications. I enjoy programming,
+                cybersecurity, problem-solving, and
+                developing technology solutions.
+            </p>
+        </section>
+
+        <!-- GitHub projects section -->
+        <section id="projects">
+            <h2>My Projects</h2>
+
+            <p>
+                Below are three projects from my GitHub
+                portfolio. Click an image or project title
+                to view the repository.
+            </p>
+
+            <div class="projects">
+
+                <div class="project">
+                    <a href="https://github.com/lucjus5243/SDC435-Final-Performance-Assessment" target="_blank" rel="noopener noreferrer">
+                        <img src="https://placehold.co/300x180/203a5e/ffffff?text=Python+Project" alt="Python project image">
+                        <p>Python Database Project</p>
+                    </a>
+                </div>
+
+                <div class="project">
+                    <a href="https://github.com/lucjus5243/5.2-Calculator-Project" target="_blank" rel="noopener noreferrer">
+                        <img src="https://placehold.co/300x180/345b8c/ffffff?text=Calculator" alt="Calculator project image">
+                        <p>Calculator Project</p>
+                    </a>
+                </div>
+
+                <div class="project">
+                    <a href="https://github.com/lucjus5243/css3-styling-2-9" target="_blank" rel="noopener noreferrer">
+                        <img src="https://placehold.co/300x180/14263d/ffffff?text=Web+Design" alt="Web design project image">
+                        <p>CSS Styling Project</p>
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Contact section -->
+        <section id="contact">
+            <h2>Contact Me</h2>
+
+            <p>
+                Have a question or want to connect?
+                Complete the form below.
+            </p>
+
+            <form id="contactForm">
+                <label for="senderName">Name:</label>
+                <input type="text" id="senderName" required>
+
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" required>
+
+                <label for="subject">Subject:</label>
+                <input type="text" id="subject" required>
+
+                <label for="message">Message:</label>
+                <textarea id="message" rows="5" required></textarea>
+
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Lucas Justiniano. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Prompt the visitor for their name.
+        let visitorName = prompt("Welcome! What is your name?");
+
+        // Display a personalized welcome message.
+        if (visitorName && visitorName.trim() !== "") {
+            document.getElementById("welcomeMessage").textContent =
+                "Welcome to my portfolio, " + visitorName.trim() + "!";
+        } else {
+            document.getElementById("welcomeMessage").textContent =
+                "Welcome to my portfolio!";
+        }
+
+        // Demonstrate contact form interaction.
+        document.getElementById("contactForm")
+            .addEventListener("submit", function(event) {
+                event.preventDefault();
+                alert("Thank you for your message!");
+            });
+    </script>
+
+</body>
+</html>
