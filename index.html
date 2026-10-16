@@ -2,6 +2,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!--
+        Author: Lucas Justiniano
+        Date: October 15, 2026
+        Assignment: 2.9 Project - Control Flow Implementation
+
+        Purpose: Expand my personal portfolio website using
+        JavaScript conditional statements, loops, event listeners,
+        and interactive features. This project adds featured
+        content, a dynamic skills list, a dark mode slider,
+        and a personalized contact form confirmation.
+    -->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucas Justiniano | Portfolio</title>
@@ -54,7 +66,7 @@
             box-shadow: 0 2px 8px #ddd;
         }
 
-        h2 {
+        h2, h3 {
             color: #203a5e;
         }
 
@@ -80,6 +92,46 @@
             font-weight: bold;
         }
 
+        /* Featured Content styling */
+        .featured-box {
+            background-color: #edf3fa;
+            padding: 20px;
+            margin-top: 15px;
+            border-left: 5px solid #203a5e;
+            border-radius: 8px;
+        }
+
+        .featured-box a {
+            color: #203a5e;
+            font-weight: bold;
+        }
+
+        /* Skills list styling */
+        #skillsList {
+            padding-left: 30px;
+        }
+
+        #skillsList li {
+            margin-bottom: 5px;
+        }
+
+        /* Dark Mode slider styling */
+        .theme-control {
+            text-align: right;
+            padding: 12px 25px;
+            background-color: #e2e8f0;
+            color: #203a5e;
+            font-weight: bold;
+        }
+
+        .theme-control input {
+            width: auto;
+            margin-left: 10px;
+            cursor: pointer;
+            accent-color: #203a5e;
+        }
+
+        /* Contact form styling */
         input, textarea {
             width: 100%;
             padding: 10px;
@@ -106,6 +158,50 @@
             text-align: center;
             padding: 15px;
         }
+
+        /* Dark Mode CSS */
+        body.dark-mode {
+            background-color: #121820;
+            color: #f1f1f1;
+        }
+
+        body.dark-mode section {
+            background-color: #243447;
+            color: white;
+            box-shadow: 0 2px 8px #111;
+        }
+
+        body.dark-mode h2,
+        body.dark-mode h3 {
+            color: #ffcc00;
+        }
+
+        body.dark-mode .featured-box {
+            background-color: #34495e;
+            border-left-color: #ffcc00;
+        }
+
+        body.dark-mode .featured-box a,
+        body.dark-mode .project a {
+            color: #ffcc00;
+        }
+
+        body.dark-mode .theme-control {
+            background-color: #1c2836;
+            color: white;
+        }
+
+        body.dark-mode input,
+        body.dark-mode textarea {
+            background-color: #34495e;
+            color: white;
+            border: 1px solid #aaa;
+        }
+
+        body.dark-mode button {
+            background-color: #ffcc00;
+            color: #111;
+        }
     </style>
 </head>
 
@@ -118,9 +214,17 @@
         <h2 id="welcomeMessage" style="color:white;"></h2>
     </header>
 
+    <!-- Dark Mode toggle switch -->
+    <div class="theme-control">
+        <label for="darkModeToggle">Dark Mode</label>
+        <input type="checkbox" id="darkModeToggle"
+               role="switch">
+    </div>
+
     <!-- Navigation menu -->
     <nav>
         <a href="#about">About</a>
+        <a href="#featured">Featured Content</a>
         <a href="#projects">Projects</a>
         <a href="#contact">Contact</a>
     </nav>
@@ -153,6 +257,82 @@
                 cybersecurity, problem-solving, and
                 developing technology solutions.
             </p>
+
+            <!-- Dynamic skills list -->
+            <h3>My Technical Skills</h3>
+            <ul id="skillsList"></ul>
+        </section>
+
+        <!-- Featured Content section -->
+        <section id="featured">
+            <h2>Featured Content</h2>
+
+            <p>
+                Explore university resources and
+                some of my personal technology projects.
+            </p>
+
+            <!-- University Resources div -->
+            <div id="universityResources" class="featured-box">
+                <h3>University Resources</h3>
+
+                <p>
+                    Learn more about my university
+                    and academic program.
+                </p>
+
+                <a href="https://www.ecpi.edu/"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    ECPI University
+                </a>
+
+                <br>
+
+                <a href="https://www.ecpi.edu/programs"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    ECPI Academic Programs
+                </a>
+            </div>
+
+            <!-- Personal Projects div -->
+            <div id="personalProjects" class="featured-box">
+                <h3>Personal Projects</h3>
+
+                <p>
+                    Below are some of my personal
+                    programming and web development projects.
+                </p>
+
+                <div class="projects">
+
+                    <div class="project">
+                        <a href="https://github.com/lucjus5243/SDC435-Final-Performance-Assessment"
+                           target="_blank"
+                           rel="noopener noreferrer">
+
+                            <img src="https://placehold.co/300x180/203a5e/ffffff?text=Python+Project"
+                                 alt="Python Database Project">
+
+                            <p>Python Database Project</p>
+                        </a>
+                    </div>
+
+                    <div class="project">
+                        <a href="https://github.com/lucjus5243/5.2-Calculator-Project"
+                           target="_blank"
+                           rel="noopener noreferrer">
+
+                            <img src="https://placehold.co/300x180/345b8c/ffffff?text=Calculator"
+                                 alt="Calculator Project">
+
+                            <p>Calculator Project</p>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
         </section>
 
         <!-- GitHub projects section -->
@@ -168,22 +348,37 @@
             <div class="projects">
 
                 <div class="project">
-                    <a href="https://github.com/lucjus5243/SDC435-Final-Performance-Assessment" target="_blank" rel="noopener noreferrer">
-                        <img src="https://placehold.co/300x180/203a5e/ffffff?text=Python+Project" alt="Python project image">
+                    <a href="https://github.com/lucjus5243/SDC435-Final-Performance-Assessment"
+                       target="_blank"
+                       rel="noopener noreferrer">
+
+                        <img src="https://placehold.co/300x180/203a5e/ffffff?text=Python+Project"
+                             alt="Python project image">
+
                         <p>Python Database Project</p>
                     </a>
                 </div>
 
                 <div class="project">
-                    <a href="https://github.com/lucjus5243/5.2-Calculator-Project" target="_blank" rel="noopener noreferrer">
-                        <img src="https://placehold.co/300x180/345b8c/ffffff?text=Calculator" alt="Calculator project image">
+                    <a href="https://github.com/lucjus5243/5.2-Calculator-Project"
+                       target="_blank"
+                       rel="noopener noreferrer">
+
+                        <img src="https://placehold.co/300x180/345b8c/ffffff?text=Calculator"
+                             alt="Calculator project image">
+
                         <p>Calculator Project</p>
                     </a>
                 </div>
 
                 <div class="project">
-                    <a href="https://github.com/lucjus5243/css3-styling-2-9" target="_blank" rel="noopener noreferrer">
-                        <img src="https://placehold.co/300x180/14263d/ffffff?text=Web+Design" alt="Web design project image">
+                    <a href="https://github.com/lucjus5243/css3-styling-2-9"
+                       target="_blank"
+                       rel="noopener noreferrer">
+
+                        <img src="https://placehold.co/300x180/14263d/ffffff?text=Web+Design"
+                             alt="CSS Styling Project">
+
                         <p>CSS Styling Project</p>
                     </a>
                 </div>
@@ -202,18 +397,28 @@
 
             <form id="contactForm">
                 <label for="senderName">Name:</label>
-                <input type="text" id="senderName" required>
+                <input type="text"
+                       id="senderName"
+                       required>
 
                 <label for="email">Email Address:</label>
-                <input type="email" id="email" required>
+                <input type="email"
+                       id="email"
+                       required>
 
                 <label for="subject">Subject:</label>
-                <input type="text" id="subject" required>
+                <input type="text"
+                       id="subject"
+                       required>
 
                 <label for="message">Message:</label>
-                <textarea id="message" rows="5" required></textarea>
+                <textarea id="message"
+                          rows="5"
+                          required></textarea>
 
-                <button type="submit">Submit</button>
+                <button type="submit" id="submitButton">
+                    Submit
+                </button>
             </form>
         </section>
 
@@ -225,10 +430,11 @@
     </footer>
 
     <script>
-        // Prompt the visitor for their name.
+        "use strict";
+
+        // Personalized welcome message using conditional logic.
         let visitorName = prompt("Welcome! What is your name?");
 
-        // Display a personalized welcome message.
         if (visitorName && visitorName.trim() !== "") {
             document.getElementById("welcomeMessage").textContent =
                 "Welcome to my portfolio, " + visitorName.trim() + "!";
@@ -237,13 +443,89 @@
                 "Welcome to my portfolio!";
         }
 
-        // Demonstrate contact form interaction.
-        document.getElementById("contactForm")
-            .addEventListener("submit", function(event) {
-                event.preventDefault();
-                alert("Thank you for your message!");
-            });
+        // Create an array containing technical skills.
+        const skills = [
+            "HTML",
+            "CSS",
+            "JavaScript",
+            "Python",
+            "Git",
+            "GitHub",
+            "Cybersecurity"
+        ];
+
+        // Use a for loop to dynamically display the skills.
+        const skillsList = document.getElementById("skillsList");
+
+        for (let i = 0; i < skills.length; i++) {
+            const listItem = document.createElement("li");
+            listItem.textContent = skills[i];
+            skillsList.appendChild(listItem);
+        }
+
+        // Conditional logic for Featured Content.
+        // Count the projects listed in the Projects section.
+        const projectCount =
+            document.querySelectorAll("#projects .project").length;
+
+        const universityResources =
+            document.getElementById("universityResources");
+
+        const personalProjects =
+            document.getElementById("personalProjects");
+
+        // Show both divs if fewer than three projects exist.
+        // Otherwise, only show Personal Projects.
+        if (projectCount < 3) {
+            universityResources.style.display = "block";
+            personalProjects.style.display = "block";
+        } else {
+            universityResources.style.display = "none";
+            personalProjects.style.display = "block";
+        }
+
+        // Dark Mode slider event listener.
+        const darkModeToggle =
+            document.getElementById("darkModeToggle");
+
+        darkModeToggle.addEventListener("change", function() {
+            if (darkModeToggle.checked) {
+                document.body.classList.add("dark-mode");
+            } else {
+                document.body.classList.remove("dark-mode");
+            }
+        });
+
+        // Contact form button event listener.
+        const contactForm =
+            document.getElementById("contactForm");
+
+        const submitButton =
+            document.getElementById("submitButton");
+
+        // Prevent page refresh and display personalized alert.
+        submitButton.addEventListener("click", function(event) {
+            event.preventDefault();
+
+            // Check required form fields.
+            if (!contactForm.reportValidity()) {
+                return;
+            }
+
+            // Get the visitor's name from the form.
+            const senderName =
+                document.getElementById("senderName").value.trim();
+
+            if (senderName !== "") {
+                alert(
+                    "Thank you, " + senderName +
+                    ", your message has been sent!"
+                );
+            }
+        });
+
     </script>
 
 </body>
 </html>
+
