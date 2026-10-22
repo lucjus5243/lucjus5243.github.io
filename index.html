@@ -4,14 +4,14 @@
 <head>
     <!--
         Author: Lucas Justiniano
-        Date: October 15, 2026
-        Assignment: 2.9 Project - Control Flow Implementation
+        Date: October 22, 2026
+        Assignment: 3.9 Project - Creating and Referencing DOM Elements
 
-        Purpose: Expand my personal portfolio website using
-        JavaScript conditional statements, loops, event listeners,
-        and interactive features. This project adds featured
-        content, a dynamic skills list, a dark mode slider,
-        and a personalized contact form confirmation.
+        Purpose: Enhance my personal portfolio website using
+        JavaScript DOM manipulation, dynamic elements, selectors,
+        and timing functions. This project also includes
+        interactive content, a technical skills list, dark mode,
+        and a timed contact form confirmation.
     -->
 
     <meta charset="UTF-8">
@@ -106,7 +106,7 @@
             font-weight: bold;
         }
 
-        /* Skills list styling */
+        /* Technical skills styling */
         #skillsList {
             padding-left: 30px;
         }
@@ -115,7 +115,7 @@
             margin-bottom: 5px;
         }
 
-        /* Dark Mode slider styling */
+        /* Dark Mode toggle styling */
         .theme-control {
             text-align: right;
             padding: 12px 25px;
@@ -152,6 +152,35 @@
             background-color: #345b8c;
         }
 
+        button:disabled {
+            opacity: 0.7;
+            cursor: wait;
+        }
+
+        /* Dynamic project message styling */
+        .new-project-message {
+            background-color: #edf3fa;
+            border-left: 5px solid #203a5e;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        /* Contact confirmation styling */
+        #formStatus {
+            margin-top: 15px;
+            font-weight: bold;
+            min-height: 25px;
+        }
+
+        .sending {
+            color: #345b8c;
+        }
+
+        .success {
+            color: #198754;
+        }
+
         footer {
             background-color: #14263d;
             color: white;
@@ -176,7 +205,8 @@
             color: #ffcc00;
         }
 
-        body.dark-mode .featured-box {
+        body.dark-mode .featured-box,
+        body.dark-mode .new-project-message {
             background-color: #34495e;
             border-left-color: #ffcc00;
         }
@@ -202,6 +232,14 @@
             background-color: #ffcc00;
             color: #111;
         }
+
+        body.dark-mode .sending {
+            color: #ffcc00;
+        }
+
+        body.dark-mode .success {
+            color: #80e0a3;
+        }
     </style>
 </head>
 
@@ -214,11 +252,10 @@
         <h2 id="welcomeMessage" style="color:white;"></h2>
     </header>
 
-    <!-- Dark Mode toggle switch -->
+    <!-- Dark Mode toggle -->
     <div class="theme-control">
         <label for="darkModeToggle">Dark Mode</label>
-        <input type="checkbox" id="darkModeToggle"
-               role="switch">
+        <input type="checkbox" id="darkModeToggle" role="switch">
     </div>
 
     <!-- Navigation menu -->
@@ -231,7 +268,7 @@
 
     <main>
 
-        <!-- About section -->
+        <!-- About Me section -->
         <section id="about">
             <h2>About Me</h2>
 
@@ -258,7 +295,7 @@
                 developing technology solutions.
             </p>
 
-            <!-- Dynamic skills list -->
+            <!-- Dynamic technical skills list -->
             <h3>My Technical Skills</h3>
             <ul id="skillsList"></ul>
         </section>
@@ -272,7 +309,7 @@
                 some of my personal technology projects.
             </p>
 
-            <!-- University Resources div -->
+            <!-- University Resources -->
             <div id="universityResources" class="featured-box">
                 <h3>University Resources</h3>
 
@@ -296,7 +333,7 @@
                 </a>
             </div>
 
-            <!-- Personal Projects div -->
+            <!-- Personal Projects -->
             <div id="personalProjects" class="featured-box">
                 <h3>Personal Projects</h3>
 
@@ -335,7 +372,7 @@
             </div>
         </section>
 
-        <!-- GitHub projects section -->
+        <!-- GitHub Projects section -->
         <section id="projects">
             <h2>My Projects</h2>
 
@@ -384,6 +421,9 @@
                 </div>
 
             </div>
+
+            <!-- A new paragraph will be added here with JavaScript -->
+
         </section>
 
         <!-- Contact section -->
@@ -396,6 +436,7 @@
             </p>
 
             <form id="contactForm">
+
                 <label for="senderName">Name:</label>
                 <input type="text"
                        id="senderName"
@@ -419,7 +460,12 @@
                 <button type="submit" id="submitButton">
                     Submit
                 </button>
+
             </form>
+
+            <!-- JavaScript displays timed form messages here -->
+            <div id="formStatus" role="status" aria-live="polite"></div>
+
         </section>
 
     </main>
@@ -432,7 +478,44 @@
     <script>
         "use strict";
 
-        // Personalized welcome message using conditional logic.
+        // ==========================================
+        // 3.9 PROJECT - DOM MANIPULATION
+        // Author: Lucas Justiniano
+        // Date: October 22, 2026
+        // ==========================================
+
+        // Dynamically create a paragraph in Projects
+        const newProjectMessage = document.createElement("p");
+
+        newProjectMessage.textContent =
+            "I am continuing to develop my JavaScript skills " +
+            "by creating interactive webpages and working " +
+            "with the Document Object Model (DOM).";
+
+        newProjectMessage.classList.add("new-project-message");
+
+        // Add the new element to the Projects section
+        document.getElementById("projects")
+            .appendChild(newProjectMessage);
+
+        // Use querySelector to modify the Projects heading
+        const projectsHeading =
+            document.querySelector("#projects h2");
+
+        projectsHeading.textContent =
+            "My Projects and Recent Work";
+
+        // Use querySelector to modify the Contact heading
+        const contactHeading =
+            document.querySelector("#contact h2");
+
+        contactHeading.textContent = "Get In Touch";
+
+        // ==========================================
+        // PERSONALIZED WELCOME MESSAGE
+        // ==========================================
+
+        // Ask the visitor for their name
         let visitorName = prompt("Welcome! What is your name?");
 
         if (visitorName && visitorName.trim() !== "") {
@@ -443,7 +526,11 @@
                 "Welcome to my portfolio!";
         }
 
-        // Create an array containing technical skills.
+        // ==========================================
+        // DYNAMIC TECHNICAL SKILLS LIST
+        // ==========================================
+
+        // Array containing technical skills
         const skills = [
             "HTML",
             "CSS",
@@ -454,7 +541,7 @@
             "Cybersecurity"
         ];
 
-        // Use a for loop to dynamically display the skills.
+        // Create new list elements using a loop
         const skillsList = document.getElementById("skillsList");
 
         for (let i = 0; i < skills.length; i++) {
@@ -463,8 +550,11 @@
             skillsList.appendChild(listItem);
         }
 
-        // Conditional logic for Featured Content.
-        // Count the projects listed in the Projects section.
+        // ==========================================
+        // FEATURED CONTENT CONDITIONAL LOGIC
+        // ==========================================
+
+        // Count the projects in the Projects section
         const projectCount =
             document.querySelectorAll("#projects .project").length;
 
@@ -474,8 +564,7 @@
         const personalProjects =
             document.getElementById("personalProjects");
 
-        // Show both divs if fewer than three projects exist.
-        // Otherwise, only show Personal Projects.
+        // Display the appropriate featured content
         if (projectCount < 3) {
             universityResources.style.display = "block";
             personalProjects.style.display = "block";
@@ -484,10 +573,15 @@
             personalProjects.style.display = "block";
         }
 
-        // Dark Mode slider event listener.
+        // ==========================================
+        // DARK MODE TOGGLE
+        // ==========================================
+
+        // Select the Dark Mode toggle
         const darkModeToggle =
             document.getElementById("darkModeToggle");
 
+        // Change the page appearance when toggled
         darkModeToggle.addEventListener("change", function() {
             if (darkModeToggle.checked) {
                 document.body.classList.add("dark-mode");
@@ -496,36 +590,69 @@
             }
         });
 
-        // Contact form button event listener.
+        // ==========================================
+        // 3.9 PROJECT - TIMED CONTACT CONFIRMATION
+        // ==========================================
+
+        // Select the existing contact form and button
         const contactForm =
             document.getElementById("contactForm");
 
         const submitButton =
             document.getElementById("submitButton");
 
-        // Prevent page refresh and display personalized alert.
-        submitButton.addEventListener("click", function(event) {
+        const formStatus =
+            document.getElementById("formStatus");
+
+        // Handle the form submission without page refresh
+        contactForm.addEventListener("submit", function(event) {
+
+            // Prevent the default form submission behavior
             event.preventDefault();
 
-            // Check required form fields.
+            // Validate all required form fields
             if (!contactForm.reportValidity()) {
                 return;
             }
 
-            // Get the visitor's name from the form.
+            // Get the visitor's name
             const senderName =
                 document.getElementById("senderName").value.trim();
 
-            if (senderName !== "") {
-                alert(
+            // Display a dynamic loading message
+            const loadingMessage = document.createElement("p");
+
+            loadingMessage.textContent = "Sending message...";
+            loadingMessage.className = "sending";
+
+            // Remove an earlier message before showing loading
+            formStatus.replaceChildren(loadingMessage);
+
+            // Disable button during the confirmation delay
+            submitButton.disabled = true;
+
+            // Wait 3 seconds before showing confirmation
+            setTimeout(function() {
+
+                // Replace loading text with confirmation
+                loadingMessage.textContent =
                     "Thank you, " + senderName +
-                    ", your message has been sent!"
-                );
-            }
+                    "! Message sent successfully!";
+
+                loadingMessage.className = "success";
+
+                // Reset the demonstration form
+                contactForm.reset();
+
+                // Enable the submit button again
+                submitButton.disabled = false;
+
+            }, 3000);
         });
 
     </script>
 
 </body>
 </html>
+
 
