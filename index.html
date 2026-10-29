@@ -4,14 +4,14 @@
 <head>
     <!--
         Author: Lucas Justiniano
-        Date: October 22, 2026
-        Assignment: 3.9 Project - Creating and Referencing DOM Elements
+        Date: October 29, 2026
+        Assignment: 4.8 Project - Persistent Storage
 
-        Purpose: Enhance my personal portfolio website using
-        JavaScript DOM manipulation, dynamic elements, selectors,
-        and timing functions. This project also includes
-        interactive content, a technical skills list, dark mode,
-        and a timed contact form confirmation.
+        This project expands my personal portfolio website.
+        It replaces the browser prompt with a custom welcome
+        modal, adds a tooltip to the Contact Form button,
+        and saves the Dark Mode preference using localStorage.
+        Existing DOM features and projects are preserved.
     -->
 
     <meta charset="UTF-8">
@@ -33,6 +33,10 @@
             color: white;
             text-align: center;
             padding: 30px;
+        }
+
+        header h2 {
+            color: white;
         }
 
         nav {
@@ -87,7 +91,8 @@
             border-radius: 8px;
         }
 
-        .project a {
+        .project a,
+        .featured-box a {
             color: #203a5e;
             font-weight: bold;
         }
@@ -99,11 +104,6 @@
             margin-top: 15px;
             border-left: 5px solid #203a5e;
             border-radius: 8px;
-        }
-
-        .featured-box a {
-            color: #203a5e;
-            font-weight: bold;
         }
 
         /* Technical skills styling */
@@ -166,7 +166,7 @@
             border-radius: 5px;
         }
 
-        /* Contact confirmation styling */
+        /* Contact form confirmation */
         #formStatus {
             margin-top: 15px;
             font-weight: bold;
@@ -188,7 +188,7 @@
             padding: 15px;
         }
 
-        /* Dark Mode CSS */
+        /* Dark Mode appearance */
         body.dark-mode {
             background-color: #121820;
             color: #f1f1f1;
@@ -240,25 +240,118 @@
         body.dark-mode .success {
             color: #80e0a3;
         }
+
+        /* 4.8 - Custom welcome modal overlay */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        .modal-overlay[hidden] {
+            display: none;
+        }
+
+        .modal-content {
+            background-color: white;
+            color: #203a5e;
+            width: 100%;
+            max-width: 440px;
+            padding: 30px;
+            box-sizing: border-box;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+        }
+
+        .modal-content h2 {
+            color: #203a5e;
+        }
+
+        body.dark-mode .modal-content {
+            background-color: #243447;
+            color: white;
+        }
+
+        body.dark-mode .modal-content h2 {
+            color: #ffcc00;
+        }
+
+        /* 4.8 - Contact Submit button tooltip */
+        .submit-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-text {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #14263d;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease;
+            pointer-events: none;
+        }
+
+        .submit-tooltip:hover .tooltip-text,
+        .submit-tooltip:focus-within .tooltip-text {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
 
 <body>
 
+    <!-- 4.8 - Welcome modal displayed on page load -->
+    <div id="welcomeModal"
+         class="modal-overlay"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="modalTitle">
+
+        <div class="modal-content">
+            <h2 id="modalTitle">Welcome to My Portfolio!</h2>
+
+            <p>
+                This page is a work in progress.
+                Thank you for visiting my portfolio!
+            </p>
+
+            <button type="button" id="closeModalButton">
+                Close
+            </button>
+        </div>
+    </div>
+
     <!-- Website header -->
     <header>
         <h1>Lucas Justiniano</h1>
         <p>Software Development | Cybersecurity | IT</p>
-        <h2 id="welcomeMessage" style="color:white;"></h2>
+        <h2 id="welcomeMessage"></h2>
     </header>
 
     <!-- Dark Mode toggle -->
     <div class="theme-control">
         <label for="darkModeToggle">Dark Mode</label>
-        <input type="checkbox" id="darkModeToggle" role="switch">
+        <input type="checkbox"
+               id="darkModeToggle"
+               role="switch">
     </div>
 
-    <!-- Navigation menu -->
+    <!-- Navigation -->
     <nav>
         <a href="#about">About</a>
         <a href="#featured">Featured Content</a>
@@ -268,7 +361,7 @@
 
     <main>
 
-        <!-- About Me section -->
+        <!-- About Me -->
         <section id="about">
             <h2>About Me</h2>
 
@@ -300,7 +393,7 @@
             <ul id="skillsList"></ul>
         </section>
 
-        <!-- Featured Content section -->
+        <!-- Featured Content -->
         <section id="featured">
             <h2>Featured Content</h2>
 
@@ -309,7 +402,7 @@
                 some of my personal technology projects.
             </p>
 
-            <!-- University Resources -->
+            <!-- University resources -->
             <div id="universityResources" class="featured-box">
                 <h3>University Resources</h3>
 
@@ -333,7 +426,7 @@
                 </a>
             </div>
 
-            <!-- Personal Projects -->
+            <!-- Personal projects -->
             <div id="personalProjects" class="featured-box">
                 <h3>Personal Projects</h3>
 
@@ -372,7 +465,7 @@
             </div>
         </section>
 
-        <!-- GitHub Projects section -->
+        <!-- GitHub Projects -->
         <section id="projects">
             <h2>My Projects</h2>
 
@@ -422,11 +515,10 @@
 
             </div>
 
-            <!-- A new paragraph will be added here with JavaScript -->
-
+            <!-- JavaScript adds a dynamic paragraph here -->
         </section>
 
-        <!-- Contact section -->
+        <!-- Contact Form -->
         <section id="contact">
             <h2>Contact Me</h2>
 
@@ -457,20 +549,35 @@
                           rows="5"
                           required></textarea>
 
-                <button type="submit" id="submitButton">
-                    Submit
-                </button>
+                <!-- 4.8 - Submit button tooltip -->
+                <span class="submit-tooltip">
+
+                    <button type="submit"
+                            id="submitButton"
+                            aria-describedby="submitTooltipText">
+                        Submit
+                    </button>
+
+                    <span id="submitTooltipText"
+                          class="tooltip-text"
+                          role="tooltip">
+                        Click to send your message!
+                    </span>
+
+                </span>
 
             </form>
 
-            <!-- JavaScript displays timed form messages here -->
-            <div id="formStatus" role="status" aria-live="polite"></div>
+            <!-- Timed contact confirmation -->
+            <div id="formStatus"
+                 role="status"
+                 aria-live="polite"></div>
 
         </section>
 
     </main>
 
-    <!-- Footer -->
+    <!-- Website footer -->
     <footer>
         <p>&copy; 2026 Lucas Justiniano. All Rights Reserved.</p>
     </footer>
@@ -480,11 +587,9 @@
 
         // ==========================================
         // 3.9 PROJECT - DOM MANIPULATION
-        // Author: Lucas Justiniano
-        // Date: October 22, 2026
         // ==========================================
 
-        // Dynamically create a paragraph in Projects
+        // Create a new paragraph in Projects.
         const newProjectMessage = document.createElement("p");
 
         newProjectMessage.textContent =
@@ -494,43 +599,48 @@
 
         newProjectMessage.classList.add("new-project-message");
 
-        // Add the new element to the Projects section
         document.getElementById("projects")
             .appendChild(newProjectMessage);
 
-        // Use querySelector to modify the Projects heading
+        // Update headings using querySelector.
         const projectsHeading =
             document.querySelector("#projects h2");
 
         projectsHeading.textContent =
             "My Projects and Recent Work";
 
-        // Use querySelector to modify the Contact heading
         const contactHeading =
             document.querySelector("#contact h2");
 
         contactHeading.textContent = "Get In Touch";
 
         // ==========================================
-        // PERSONALIZED WELCOME MESSAGE
+        // 4.8 PROJECT - CUSTOM WELCOME MODAL
         // ==========================================
 
-        // Ask the visitor for their name
-        let visitorName = prompt("Welcome! What is your name?");
+        // Replace the old prompt with a welcome message.
+        document.getElementById("welcomeMessage").textContent =
+            "Welcome to my portfolio!";
 
-        if (visitorName && visitorName.trim() !== "") {
-            document.getElementById("welcomeMessage").textContent =
-                "Welcome to my portfolio, " + visitorName.trim() + "!";
-        } else {
-            document.getElementById("welcomeMessage").textContent =
-                "Welcome to my portfolio!";
-        }
+        // Get modal elements.
+        const welcomeModal =
+            document.getElementById("welcomeModal");
+
+        const closeModalButton =
+            document.getElementById("closeModalButton");
+
+        // Focus the Close button when the page loads.
+        closeModalButton.focus();
+
+        // Close the modal when the user clicks Close.
+        closeModalButton.addEventListener("click", function() {
+            welcomeModal.hidden = true;
+        });
 
         // ==========================================
         // DYNAMIC TECHNICAL SKILLS LIST
         // ==========================================
 
-        // Array containing technical skills
         const skills = [
             "HTML",
             "CSS",
@@ -541,12 +651,17 @@
             "Cybersecurity"
         ];
 
-        // Create new list elements using a loop
-        const skillsList = document.getElementById("skillsList");
+        const skillsList =
+            document.getElementById("skillsList");
 
+        // Create and append each skill dynamically.
         for (let i = 0; i < skills.length; i++) {
-            const listItem = document.createElement("li");
+
+            const listItem =
+                document.createElement("li");
+
             listItem.textContent = skills[i];
+
             skillsList.appendChild(listItem);
         }
 
@@ -554,7 +669,6 @@
         // FEATURED CONTENT CONDITIONAL LOGIC
         // ==========================================
 
-        // Count the projects in the Projects section
         const projectCount =
             document.querySelectorAll("#projects .project").length;
 
@@ -564,37 +678,67 @@
         const personalProjects =
             document.getElementById("personalProjects");
 
-        // Display the appropriate featured content
+        // Display content based on project count.
         if (projectCount < 3) {
+
             universityResources.style.display = "block";
             personalProjects.style.display = "block";
+
         } else {
+
             universityResources.style.display = "none";
             personalProjects.style.display = "block";
         }
 
         // ==========================================
-        // DARK MODE TOGGLE
+        // 4.8 PROJECT - PERSISTENT DARK MODE
         // ==========================================
 
-        // Select the Dark Mode toggle
         const darkModeToggle =
             document.getElementById("darkModeToggle");
 
-        // Change the page appearance when toggled
+        // Retrieve the saved preference from localStorage.
+        const savedDarkMode =
+            localStorage.getItem("darkMode") === "true";
+
+        // Apply saved preference when the page loads.
+        darkModeToggle.checked = savedDarkMode;
+
+        document.body.classList.toggle(
+            "dark-mode",
+            savedDarkMode
+        );
+
+        // Save a new preference when the toggle changes.
         darkModeToggle.addEventListener("change", function() {
-            if (darkModeToggle.checked) {
-                document.body.classList.add("dark-mode");
-            } else {
-                document.body.classList.remove("dark-mode");
-            }
+
+            const enabled = darkModeToggle.checked;
+
+            // Update page appearance.
+            document.body.classList.toggle(
+                "dark-mode",
+                enabled
+            );
+
+            // Store preference for future visits.
+            localStorage.setItem(
+                "darkMode",
+                String(enabled)
+            );
         });
+
+        // ==========================================
+        // 4.8 PROJECT - CONTACT BUTTON TOOLTIP
+        // ==========================================
+
+        // Tooltip behavior is controlled by CSS.
+        // It appears when the Submit button is hovered
+        // or focused using the keyboard.
 
         // ==========================================
         // 3.9 PROJECT - TIMED CONTACT CONFIRMATION
         // ==========================================
 
-        // Select the existing contact form and button
         const contactForm =
             document.getElementById("contactForm");
 
@@ -604,47 +748,46 @@
         const formStatus =
             document.getElementById("formStatus");
 
-        // Handle the form submission without page refresh
+        // Handle contact form submission.
         contactForm.addEventListener("submit", function(event) {
 
-            // Prevent the default form submission behavior
+            // Prevent the browser from reloading the page.
             event.preventDefault();
 
-            // Validate all required form fields
+            // Validate required fields.
             if (!contactForm.reportValidity()) {
                 return;
             }
 
-            // Get the visitor's name
+            // Get the visitor's name.
             const senderName =
                 document.getElementById("senderName").value.trim();
 
-            // Display a dynamic loading message
-            const loadingMessage = document.createElement("p");
+            // Create a dynamic loading message.
+            const loadingMessage =
+                document.createElement("p");
 
             loadingMessage.textContent = "Sending message...";
             loadingMessage.className = "sending";
 
-            // Remove an earlier message before showing loading
             formStatus.replaceChildren(loadingMessage);
 
-            // Disable button during the confirmation delay
+            // Temporarily disable the Submit button.
             submitButton.disabled = true;
 
-            // Wait 3 seconds before showing confirmation
+            // Show confirmation after three seconds.
             setTimeout(function() {
 
-                // Replace loading text with confirmation
                 loadingMessage.textContent =
                     "Thank you, " + senderName +
                     "! Message sent successfully!";
 
                 loadingMessage.className = "success";
 
-                // Reset the demonstration form
+                // Clear the demonstration form.
                 contactForm.reset();
 
-                // Enable the submit button again
+                // Enable the Submit button again.
                 submitButton.disabled = false;
 
             }, 3000);
@@ -654,5 +797,6 @@
 
 </body>
 </html>
+
 
 
