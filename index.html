@@ -4,22 +4,35 @@
 <head>
     <!--
         Author: Lucas Justiniano
-        Date: October 29, 2026
-        Assignment: 4.8 Project - Persistent Storage
+        Date: November 5, 2026
+        Assignment: 5.9 Project - Creating Scalable Foundations
 
-        This project expands my personal portfolio website.
-        It replaces the browser prompt with a custom welcome
-        modal, adds a tooltip to the Contact Form button,
-        and saves the Dark Mode preference using localStorage.
-        Existing DOM features and projects are preserved.
+        Purpose: This project enhances my personal portfolio
+        using JavaScript objects, arrays, loops, and DOM
+        manipulation. Project information is saved using
+        JSON.stringify() and sessionStorage, then retrieved
+        using JSON.parse() when the page reloads.
+
+        Previous features including dark mode, welcome
+        modal, navigation, and contact form are preserved.
     -->
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Lucas Justiniano | Portfolio</title>
 
     <style>
-        /* General page styling */
+        /* General webpage styling */
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -32,13 +45,19 @@
             background-color: #203a5e;
             color: white;
             text-align: center;
-            padding: 30px;
+            padding: 35px 20px;
+        }
+
+        header h1 {
+            font-size: 38px;
+            margin-bottom: 10px;
         }
 
         header h2 {
             color: white;
         }
 
+        /* Navigation styling */
         nav {
             background-color: #14263d;
             text-align: center;
@@ -48,8 +67,9 @@
         nav a {
             color: white;
             text-decoration: none;
-            margin: 15px;
+            margin: 12px;
             font-weight: bold;
+            display: inline-block;
         }
 
         nav a:hover {
@@ -57,7 +77,7 @@
         }
 
         main {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 30px auto;
             padding: 0 20px;
         }
@@ -74,30 +94,16 @@
             color: #203a5e;
         }
 
-        .projects {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+        /* Technical skills styling */
+        #skillsList {
+            padding-left: 25px;
         }
 
-        .project {
-            flex: 1 1 200px;
-            text-align: center;
+        #skillsList li {
+            margin-bottom: 7px;
         }
 
-        .project img {
-            width: 100%;
-            max-width: 220px;
-            border-radius: 8px;
-        }
-
-        .project a,
-        .featured-box a {
-            color: #203a5e;
-            font-weight: bold;
-        }
-
-        /* Featured Content styling */
+        /* Featured content styling */
         .featured-box {
             background-color: #edf3fa;
             padding: 20px;
@@ -106,16 +112,67 @@
             border-radius: 8px;
         }
 
-        /* Technical skills styling */
-        #skillsList {
-            padding-left: 30px;
+        .featured-box a {
+            color: #203a5e;
+            font-weight: bold;
         }
 
-        #skillsList li {
-            margin-bottom: 5px;
+        /* Dynamic project card layout */
+        .projects {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(230px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
 
-        /* Dark Mode toggle styling */
+        .project {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 18px;
+            background-color: #f8fafc;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .project:hover {
+            transform: translateY(-4px);
+        }
+
+        .project img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .project h3 {
+            margin-bottom: 10px;
+        }
+
+        .project p {
+            font-size: 15px;
+        }
+
+        .project a {
+            color: #203a5e;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .project a:hover {
+            text-decoration: underline;
+        }
+
+        .new-project-message {
+            background-color: #edf3fa;
+            border-left: 5px solid #203a5e;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
+        /* Dark mode toggle */
         .theme-control {
             text-align: right;
             padding: 12px 25px;
@@ -128,7 +185,6 @@
             width: auto;
             margin-left: 10px;
             cursor: pointer;
-            accent-color: #203a5e;
         }
 
         /* Contact form styling */
@@ -136,7 +192,9 @@
             width: 100%;
             padding: 10px;
             margin: 8px 0 15px;
-            box-sizing: border-box;
+            border: 1px solid #aaa;
+            border-radius: 4px;
+            font: inherit;
         }
 
         button {
@@ -146,6 +204,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
         }
 
         button:hover {
@@ -157,16 +216,6 @@
             cursor: wait;
         }
 
-        /* Dynamic project message styling */
-        .new-project-message {
-            background-color: #edf3fa;
-            border-left: 5px solid #203a5e;
-            padding: 15px;
-            margin-top: 20px;
-            border-radius: 5px;
-        }
-
-        /* Contact form confirmation */
         #formStatus {
             margin-top: 15px;
             font-weight: bold;
@@ -181,6 +230,34 @@
             color: #198754;
         }
 
+        /* Contact submit button tooltip */
+        .submit-tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-text {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #14263d;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .submit-tooltip:hover .tooltip-text,
+        .submit-tooltip:focus-within .tooltip-text {
+            opacity: 1;
+            visibility: visible;
+        }
+
         footer {
             background-color: #14263d;
             color: white;
@@ -188,7 +265,7 @@
             padding: 15px;
         }
 
-        /* Dark Mode appearance */
+        /* Dark mode appearance */
         body.dark-mode {
             background-color: #121820;
             color: #f1f1f1;
@@ -211,8 +288,13 @@
             border-left-color: #ffcc00;
         }
 
-        body.dark-mode .featured-box a,
-        body.dark-mode .project a {
+        body.dark-mode .project {
+            background-color: #34495e;
+            border-color: #64748b;
+        }
+
+        body.dark-mode .project a,
+        body.dark-mode .featured-box a {
             color: #ffcc00;
         }
 
@@ -225,7 +307,7 @@
         body.dark-mode textarea {
             background-color: #34495e;
             color: white;
-            border: 1px solid #aaa;
+            border-color: #aaa;
         }
 
         body.dark-mode button {
@@ -233,15 +315,11 @@
             color: #111;
         }
 
-        body.dark-mode .sending {
-            color: #ffcc00;
-        }
-
         body.dark-mode .success {
             color: #80e0a3;
         }
 
-        /* 4.8 - Custom welcome modal overlay */
+        /* Welcome modal styling */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -263,7 +341,6 @@
             width: 100%;
             max-width: 440px;
             padding: 30px;
-            box-sizing: border-box;
             border-radius: 12px;
             text-align: center;
             box-shadow: 0 12px 35px rgba(0,0,0,0.25);
@@ -282,40 +359,30 @@
             color: #ffcc00;
         }
 
-        /* 4.8 - Contact Submit button tooltip */
-        .submit-tooltip {
-            position: relative;
-            display: inline-block;
-        }
+        /* Responsive layout */
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 30px;
+            }
 
-        .tooltip-text {
-            position: absolute;
-            bottom: calc(100% + 10px);
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #14263d;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 5px;
-            font-size: 14px;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s ease;
-            pointer-events: none;
-        }
+            nav a {
+                margin: 6px;
+            }
 
-        .submit-tooltip:hover .tooltip-text,
-        .submit-tooltip:focus-within .tooltip-text {
-            opacity: 1;
-            visibility: visible;
+            section {
+                padding: 18px;
+            }
+
+            .projects {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- 4.8 - Welcome modal displayed on page load -->
+    <!-- Welcome popup from previous project -->
     <div id="welcomeModal"
          class="modal-overlay"
          role="dialog"
@@ -323,7 +390,9 @@
          aria-labelledby="modalTitle">
 
         <div class="modal-content">
-            <h2 id="modalTitle">Welcome to My Portfolio!</h2>
+            <h2 id="modalTitle">
+                Welcome to My Portfolio!
+            </h2>
 
             <p>
                 This page is a work in progress.
@@ -339,13 +408,18 @@
     <!-- Website header -->
     <header>
         <h1>Lucas Justiniano</h1>
-        <p>Software Development | Cybersecurity | IT</p>
+
+        <p>
+            Software Development | Cybersecurity | IT
+        </p>
+
         <h2 id="welcomeMessage"></h2>
     </header>
 
     <!-- Dark Mode toggle -->
     <div class="theme-control">
         <label for="darkModeToggle">Dark Mode</label>
+
         <input type="checkbox"
                id="darkModeToggle"
                role="switch">
@@ -361,7 +435,7 @@
 
     <main>
 
-        <!-- About Me -->
+        <!-- About Me Section -->
         <section id="about">
             <h2>About Me</h2>
 
@@ -377,8 +451,9 @@
                 in Computer and Information Sciences,
                 specializing in Cyber and Network Security.
                 I am currently pursuing my bachelor's degree
-                in Information Technology with a focus on
-                Software Development and Coding.
+                in Information Technology, specializing in
+                Software Development and Coding with an
+                Artificial Intelligence concentration.
             </p>
 
             <p>
@@ -388,22 +463,24 @@
                 developing technology solutions.
             </p>
 
-            <!-- Dynamic technical skills list -->
+            <!-- JavaScript generates the skills list -->
             <h3>My Technical Skills</h3>
+
             <ul id="skillsList"></ul>
         </section>
 
-        <!-- Featured Content -->
+        <!-- Featured Content Section -->
         <section id="featured">
             <h2>Featured Content</h2>
 
             <p>
                 Explore university resources and
-                some of my personal technology projects.
+                some of my technology projects.
             </p>
 
-            <!-- University resources -->
-            <div id="universityResources" class="featured-box">
+            <div id="universityResources"
+                 class="featured-box">
+
                 <h3>University Resources</h3>
 
                 <p>
@@ -417,110 +494,56 @@
                     ECPI University
                 </a>
 
-                <br>
-
-                <a href="https://www.ecpi.edu/programs"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    ECPI Academic Programs
-                </a>
+                <p>
+                    <a href="https://www.ecpi.edu/programs"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        ECPI Academic Programs
+                    </a>
+                </p>
             </div>
 
-            <!-- Personal projects -->
-            <div id="personalProjects" class="featured-box">
+            <div id="personalProjects"
+                 class="featured-box">
+
                 <h3>Personal Projects</h3>
 
                 <p>
-                    Below are some of my personal
-                    programming and web development projects.
+                    My portfolio includes Python, JavaScript,
+                    databases, and web development projects.
+                    Scroll down to view my GitHub repositories.
                 </p>
-
-                <div class="projects">
-
-                    <div class="project">
-                        <a href="https://github.com/lucjus5243/SDC435-Final-Performance-Assessment"
-                           target="_blank"
-                           rel="noopener noreferrer">
-
-                            <img src="https://placehold.co/300x180/203a5e/ffffff?text=Python+Project"
-                                 alt="Python Database Project">
-
-                            <p>Python Database Project</p>
-                        </a>
-                    </div>
-
-                    <div class="project">
-                        <a href="https://github.com/lucjus5243/5.2-Calculator-Project"
-                           target="_blank"
-                           rel="noopener noreferrer">
-
-                            <img src="https://placehold.co/300x180/345b8c/ffffff?text=Calculator"
-                                 alt="Calculator Project">
-
-                            <p>Calculator Project</p>
-                        </a>
-                    </div>
-
-                </div>
             </div>
         </section>
 
-        <!-- GitHub Projects -->
+        <!-- Dynamic Projects Section -->
         <section id="projects">
-            <h2>My Projects</h2>
+            <h2>My Projects and Recent Work</h2>
 
             <p>
-                Below are three projects from my GitHub
-                portfolio. Click an image or project title
-                to view the repository.
+                The projects below are generated dynamically
+                using JavaScript objects and stored using
+                sessionStorage.
             </p>
 
-            <div class="projects">
+            <!-- JavaScript inserts project cards here -->
+            <div id="projectContainer"
+                 class="projects"></div>
 
-                <div class="project">
-                    <a href="https://github.com/lucjus5243/SDC435-Final-Performance-Assessment"
-                       target="_blank"
-                       rel="noopener noreferrer">
+            <p id="storageStatus"
+               aria-live="polite"></p>
 
-                        <img src="https://placehold.co/300x180/203a5e/ffffff?text=Python+Project"
-                             alt="Python project image">
-
-                        <p>Python Database Project</p>
-                    </a>
-                </div>
-
-                <div class="project">
-                    <a href="https://github.com/lucjus5243/5.2-Calculator-Project"
-                       target="_blank"
-                       rel="noopener noreferrer">
-
-                        <img src="https://placehold.co/300x180/345b8c/ffffff?text=Calculator"
-                             alt="Calculator project image">
-
-                        <p>Calculator Project</p>
-                    </a>
-                </div>
-
-                <div class="project">
-                    <a href="https://github.com/lucjus5243/css3-styling-2-9"
-                       target="_blank"
-                       rel="noopener noreferrer">
-
-                        <img src="https://placehold.co/300x180/14263d/ffffff?text=Web+Design"
-                             alt="CSS Styling Project">
-
-                        <p>CSS Styling Project</p>
-                    </a>
-                </div>
-
+            <div class="new-project-message">
+                I am continuing to develop my JavaScript
+                skills by creating interactive webpages
+                and working with the Document Object
+                Model (DOM).
             </div>
-
-            <!-- JavaScript adds a dynamic paragraph here -->
         </section>
 
-        <!-- Contact Form -->
+        <!-- Contact Form Section -->
         <section id="contact">
-            <h2>Contact Me</h2>
+            <h2>Get In Touch</h2>
 
             <p>
                 Have a question or want to connect?
@@ -528,7 +551,6 @@
             </p>
 
             <form id="contactForm">
-
                 <label for="senderName">Name:</label>
                 <input type="text"
                        id="senderName"
@@ -549,9 +571,7 @@
                           rows="5"
                           required></textarea>
 
-                <!-- 4.8 - Submit button tooltip -->
                 <span class="submit-tooltip">
-
                     <button type="submit"
                             id="submitButton"
                             aria-describedby="submitTooltipText">
@@ -561,81 +581,207 @@
                     <span id="submitTooltipText"
                           class="tooltip-text"
                           role="tooltip">
-                        Click to send your message!
+                        Submit your message!
                     </span>
-
                 </span>
-
             </form>
 
-            <!-- Timed contact confirmation -->
+            <!-- Timed form confirmation -->
             <div id="formStatus"
                  role="status"
                  aria-live="polite"></div>
-
         </section>
 
     </main>
 
-    <!-- Website footer -->
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Lucas Justiniano. All Rights Reserved.</p>
+        <p>
+            &copy; 2026 Lucas Justiniano.
+            All Rights Reserved.
+        </p>
     </footer>
 
     <script>
         "use strict";
 
-        // ==========================================
-        // 3.9 PROJECT - DOM MANIPULATION
-        // ==========================================
+        /*
+            5.9 PROJECT - CREATING SCALABLE FOUNDATIONS
 
-        // Create a new paragraph in Projects.
-        const newProjectMessage = document.createElement("p");
-
-        newProjectMessage.textContent =
-            "I am continuing to develop my JavaScript skills " +
-            "by creating interactive webpages and working " +
-            "with the Document Object Model (DOM).";
-
-        newProjectMessage.classList.add("new-project-message");
-
-        document.getElementById("projects")
-            .appendChild(newProjectMessage);
-
-        // Update headings using querySelector.
-        const projectsHeading =
-            document.querySelector("#projects h2");
-
-        projectsHeading.textContent =
-            "My Projects and Recent Work";
-
-        const contactHeading =
-            document.querySelector("#contact h2");
-
-        contactHeading.textContent = "Get In Touch";
+            This script creates JavaScript objects containing
+            project information, stores them in sessionStorage,
+            retrieves them using JSON.parse(), and dynamically
+            creates project cards using DOM manipulation.
+        */
 
         // ==========================================
-        // 4.8 PROJECT - CUSTOM WELCOME MODAL
+        // CUSTOM JAVASCRIPT PROJECT OBJECTS
         // ==========================================
 
-        // Replace the old prompt with a welcome message.
-        document.getElementById("welcomeMessage").textContent =
-            "Welcome to my portfolio!";
+        // Object 1 - Python Database Project
+        const project1 = {
+            title: "Python Database Project",
+            summary:
+                "A Python project demonstrating database " +
+                "operations, structured data management, " +
+                "and programming fundamentals.",
+            image:
+                "https://placehold.co/300x180/203a5e/ffffff?text=Python+Database",
+            repository:
+                "https://github.com/lucjus5243/SDC435-Final-Performance-Assessment"
+        };
 
-        // Get modal elements.
-        const welcomeModal =
-            document.getElementById("welcomeModal");
+        // Object 2 - Calculator Project
+        const project2 = {
+            title: "JavaScript Calculator Project",
+            summary:
+                "An interactive calculator developed using " +
+                "HTML, CSS, and JavaScript to perform " +
+                "mathematical calculations.",
+            image:
+                "https://placehold.co/300x180/345b8c/ffffff?text=Calculator",
+            repository:
+                "https://github.com/lucjus5243/5.2-Calculator-Project"
+        };
 
-        const closeModalButton =
-            document.getElementById("closeModalButton");
+        // Object 3 - CSS Styling Project
+        const project3 = {
+            title: "CSS Styling Project",
+            summary:
+                "A website styling project demonstrating " +
+                "CSS layouts, visual design, and " +
+                "responsive webpage formatting.",
+            image:
+                "https://placehold.co/300x180/14263d/ffffff?text=Web+Design",
+            repository:
+                "https://github.com/lucjus5243/css3-styling-2-9"
+        };
 
-        // Focus the Close button when the page loads.
-        closeModalButton.focus();
+        // Store the three custom objects in an array.
+        const defaultProjects = [
+            project1,
+            project2,
+            project3
+        ];
 
-        // Close the modal when the user clicks Close.
-        closeModalButton.addEventListener("click", function() {
-            welcomeModal.hidden = true;
-        });
+        // ==========================================
+        // SESSION STORAGE AND JSON
+        // ==========================================
+
+        const storageKey = "portfolioProjects";
+
+        let projectData = [];
+
+        // Check if project information already exists.
+        const savedProjects =
+            sessionStorage.getItem(storageKey);
+
+        if (savedProjects === null) {
+
+            // Convert the array into a JSON string.
+            const projectJSON =
+                JSON.stringify(defaultProjects);
+
+            // Store the serialized array.
+            sessionStorage.setItem(
+                storageKey,
+                projectJSON
+            );
+
+            projectData = defaultProjects;
+
+        } else {
+
+            // Retrieve and parse saved project data.
+            try {
+                projectData = JSON.parse(savedProjects);
+
+                // Make sure the stored data is an array.
+                if (!Array.isArray(projectData) ||
+                    projectData.length < 3) {
+
+                    throw new Error("Invalid project data");
+                }
+
+            } catch (error) {
+
+                // Restore the default project data.
+                projectData = defaultProjects;
+
+                sessionStorage.setItem(
+                    storageKey,
+                    JSON.stringify(defaultProjects)
+                );
+            }
+        }
+
+        // ==========================================
+        // DYNAMIC PROJECT RENDERING
+        // ==========================================
+
+        // Select the Projects container using the DOM.
+        const projectContainer =
+            document.querySelector("#projectContainer");
+
+        // Function to create a project card.
+        function createProjectCard(project) {
+
+            // Create the main card.
+            const card = document.createElement("article");
+            card.className = "project";
+
+            // Create the project image.
+            const image = document.createElement("img");
+            image.src = project.image;
+            image.alt = project.title + " image";
+            image.loading = "lazy";
+
+            // Create the title.
+            const title = document.createElement("h3");
+            title.textContent = project.title;
+
+            // Create the project summary.
+            const summary = document.createElement("p");
+            summary.textContent = project.summary;
+
+            // Create the repository link.
+            const link = document.createElement("a");
+            link.href = project.repository;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.textContent = "View GitHub Repository";
+
+            // Append elements to the card.
+            card.appendChild(image);
+            card.appendChild(title);
+            card.appendChild(summary);
+            card.appendChild(link);
+
+            return card;
+        }
+
+        // Loop through the array and display all projects.
+        function renderProjects(projects) {
+
+            // Clear previously displayed projects.
+            projectContainer.replaceChildren();
+
+            for (let i = 0; i < projects.length; i++) {
+
+                const projectCard =
+                    createProjectCard(projects[i]);
+
+                projectContainer.appendChild(projectCard);
+            }
+        }
+
+        // Generate the project cards when the page loads.
+        renderProjects(projectData);
+
+        // Display the number of loaded projects.
+        document.getElementById("storageStatus").textContent =
+            projectData.length +
+            " projects loaded using JavaScript and sessionStorage.";
 
         // ==========================================
         // DYNAMIC TECHNICAL SKILLS LIST
@@ -646,15 +792,18 @@
             "CSS",
             "JavaScript",
             "Python",
+            "Java",
+            "SQL",
             "Git",
             "GitHub",
-            "Cybersecurity"
+            "Cybersecurity",
+            "Database Management"
         ];
 
         const skillsList =
             document.getElementById("skillsList");
 
-        // Create and append each skill dynamically.
+        // Create each list item using a loop.
         for (let i = 0; i < skills.length; i++) {
 
             const listItem =
@@ -669,8 +818,7 @@
         // FEATURED CONTENT CONDITIONAL LOGIC
         // ==========================================
 
-        const projectCount =
-            document.querySelectorAll("#projects .project").length;
+        const projectCount = projectData.length;
 
         const universityResources =
             document.getElementById("universityResources");
@@ -678,7 +826,7 @@
         const personalProjects =
             document.getElementById("personalProjects");
 
-        // Display content based on project count.
+        // Preserve previous conditional display behavior.
         if (projectCount < 3) {
 
             universityResources.style.display = "block";
@@ -691,17 +839,37 @@
         }
 
         // ==========================================
-        // 4.8 PROJECT - PERSISTENT DARK MODE
+        // WELCOME MODAL
+        // ==========================================
+
+        document.getElementById("welcomeMessage").textContent =
+            "Welcome to my portfolio!";
+
+        const welcomeModal =
+            document.getElementById("welcomeModal");
+
+        const closeModalButton =
+            document.getElementById("closeModalButton");
+
+        closeModalButton.focus();
+
+        // Close the popup when the button is clicked.
+        closeModalButton.addEventListener("click", function() {
+
+            welcomeModal.hidden = true;
+        });
+
+        // ==========================================
+        // PERSISTENT DARK MODE
         // ==========================================
 
         const darkModeToggle =
             document.getElementById("darkModeToggle");
 
-        // Retrieve the saved preference from localStorage.
+        // Retrieve the previously saved preference.
         const savedDarkMode =
             localStorage.getItem("darkMode") === "true";
 
-        // Apply saved preference when the page loads.
         darkModeToggle.checked = savedDarkMode;
 
         document.body.classList.toggle(
@@ -709,18 +877,16 @@
             savedDarkMode
         );
 
-        // Save a new preference when the toggle changes.
+        // Save dark mode when the toggle changes.
         darkModeToggle.addEventListener("change", function() {
 
             const enabled = darkModeToggle.checked;
 
-            // Update page appearance.
             document.body.classList.toggle(
                 "dark-mode",
                 enabled
             );
 
-            // Store preference for future visits.
             localStorage.setItem(
                 "darkMode",
                 String(enabled)
@@ -728,15 +894,7 @@
         });
 
         // ==========================================
-        // 4.8 PROJECT - CONTACT BUTTON TOOLTIP
-        // ==========================================
-
-        // Tooltip behavior is controlled by CSS.
-        // It appears when the Submit button is hovered
-        // or focused using the keyboard.
-
-        // ==========================================
-        // 3.9 PROJECT - TIMED CONTACT CONFIRMATION
+        // CONTACT FORM WITH TIMED CONFIRMATION
         // ==========================================
 
         const contactForm =
@@ -748,55 +906,54 @@
         const formStatus =
             document.getElementById("formStatus");
 
-        // Handle contact form submission.
+        // Handle form submission without reloading.
         contactForm.addEventListener("submit", function(event) {
 
-            // Prevent the browser from reloading the page.
             event.preventDefault();
 
-            // Validate required fields.
             if (!contactForm.reportValidity()) {
                 return;
             }
 
-            // Get the visitor's name.
             const senderName =
-                document.getElementById("senderName").value.trim();
+                document.getElementById("senderName")
+                    .value.trim();
 
-            // Create a dynamic loading message.
             const loadingMessage =
                 document.createElement("p");
 
-            loadingMessage.textContent = "Sending message...";
+            loadingMessage.textContent =
+                "Processing message...";
+
             loadingMessage.className = "sending";
 
             formStatus.replaceChildren(loadingMessage);
 
-            // Temporarily disable the Submit button.
             submitButton.disabled = true;
 
-            // Show confirmation after three seconds.
+            // Show a demonstration confirmation after 3 seconds.
             setTimeout(function() {
 
                 loadingMessage.textContent =
                     "Thank you, " + senderName +
-                    "! Message sent successfully!";
+                    "! Your form was processed successfully. " +
+                    "This portfolio form is a demonstration " +
+                    "and does not send email.";
 
                 loadingMessage.className = "success";
 
-                // Clear the demonstration form.
                 contactForm.reset();
 
-                // Enable the Submit button again.
                 submitButton.disabled = false;
 
             }, 3000);
         });
 
+        // ==========================================
+        // END OF 5.9 PROJECT JAVASCRIPT
+        // ==========================================
+
     </script>
 
 </body>
 </html>
-
-
-
